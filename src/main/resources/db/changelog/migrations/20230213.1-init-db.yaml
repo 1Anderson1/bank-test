@@ -1,4 +1,5 @@
 databaseChangeLog:
+  - objectQuotingStrategy: QUOTE_ALL_OBJECTS
   - logicalFilePath: 20230213.1-init-db.yaml
   - changeSet:
       -preConditions:
@@ -14,7 +15,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: id
+                  name: ID
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -22,13 +23,13 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: date_of_birth
+                  name: DATE_OF_BIRTH
                   type: DATE
               - column:
-                  name: name
+                  name: NAME
                   type: VARCHAR(500)
               - column:
-                  name: password
+                  name: PASSWORD
                   type: VARCHAR(500)
   - changeSet:
       -preConditions:
@@ -48,7 +49,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: id
+                  name: ID
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -56,10 +57,12 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: user_id
+                  name: USER_ID
                   type: BIGINT
+                  constraints:
+                    nullable: false
               - column:
-                  name: balance
+                  name: BALANCE
                   type: DECIMAL
                   defaultValueNumeric: 0.0
         - createTable:
@@ -67,7 +70,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: id
+                  name: ID
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -75,10 +78,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: user_id
+                  name: USER_ID
                   type: BIGINT
+                  constraints:
+                    nullable: false
               - column:
-                  name: email
+                  name: EMAIL
                   type: VARCHAR(200)
                   constraints:
                     unique: true
@@ -87,7 +92,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: id
+                  name: ID
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -95,28 +100,43 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: user_id
+                  name: USER_ID
                   type: BIGINT
+                  constraints:
+                    nullable: false
               - column:
-                  name: phone
+                  name: PHONE
                   type: VARCHAR(13)
                   constraints:
                     unique: true
-              - addForeignKeyConstraint:
-                  constraintName: fk_account_user_id
-                  baseTableName: ACCOUNT
-                  baseColumnNames: user_id
-                  referencedTableName: USER
-                  referencedColumnNames: id
-              - addForeignKeyConstraint:
-                  constraintName: fk_email_data_user_id
-                  baseTableName: EMAIL_DATA
-                  baseColumnNames: user_id
-                  referencedTableName: USER
-                  referencedColumnNames: id
-              - addForeignKeyConstraint:
-                  constraintName: fk_phone_data_user_id
-                  baseTableName: PHONE_DATA
-                  baseColumnNames: user_id
-                  referencedTableName: USER
-                  referencedColumnNames: id
+  - changeSet:
+      -preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: ACCOUNT
+            - tableExists:
+                tableName: EMAIL_DATA
+            - tableExists:
+                tableName: PHONE_DATA
+      id: 2023-02-13-3
+      author: Boikov
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_account_user_id
+            baseTableName: ACCOUNT
+            baseColumnNames: USER_ID
+            referencedTableName: USER
+            referencedColumnNames: ID
+        - addForeignKeyConstraint:
+            constraintName: fk_email_data_user_id
+            baseTableName: EMAIL_DATA
+            baseColumnNames: USER_ID
+            referencedTableName: USER
+            referencedColumnNames: ID
+        - addForeignKeyConstraint:
+            constraintName: fk_phone_data_user_id
+            baseTableName: PHONE_DATA
+            baseColumnNames: USER_ID
+            referencedTableName: USER
+            referencedColumnNames: ID
