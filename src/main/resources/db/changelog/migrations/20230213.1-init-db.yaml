@@ -14,7 +14,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -22,13 +22,13 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: DATE_OF_BIRTH
+                  name: date_of_birth
                   type: DATE
               - column:
-                  name: NAME
+                  name: name
                   type: VARCHAR(500)
               - column:
-                  name: PASSWORD
+                  name: password
                   type: VARCHAR(500)
   - changeSet:
       -preConditions:
@@ -48,7 +48,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -56,14 +56,10 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: USER_ID
+                  name: user_id
                   type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_account_user_id
-                    references: USER(ID)
               - column:
-                  name: BALANCE
+                  name: balance
                   type: DECIMAL
                   defaultValueNumeric: 0.0
         - createTable:
@@ -71,7 +67,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -79,14 +75,10 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: USER_ID
+                  name: user_id
                   type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_email_data_user_id
-                    references: USER(ID)
               - column:
-                  name: EMAIL
+                  name: email
                   type: VARCHAR(200)
                   constraints:
                     unique: true
@@ -95,7 +87,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -103,14 +95,28 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: USER_ID
+                  name: user_id
                   type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_phone_data_user_id
-                    references: USER(ID)
               - column:
-                  name: PHONE
+                  name: phone
                   type: VARCHAR(13)
                   constraints:
                     unique: true
+              - addForeignKeyConstraint:
+                  constraintName: fk_account_user_id
+                  baseTableName: ACCOUNT
+                  baseColumnNames: user_id
+                  referencedTableName: USER
+                  referencedColumnNames: id
+              - addForeignKeyConstraint:
+                  constraintName: fk_email_data_user_id
+                  baseTableName: EMAIL_DATA
+                  baseColumnNames: user_id
+                  referencedTableName: USER
+                  referencedColumnNames: id
+              - addForeignKeyConstraint:
+                  constraintName: fk_phone_data_user_id
+                  baseTableName: PHONE_DATA
+                  baseColumnNames: user_id
+                  referencedTableName: USER
+                  referencedColumnNames: id

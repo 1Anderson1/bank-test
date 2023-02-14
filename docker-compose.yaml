@@ -6,7 +6,7 @@ services:
       - POSTGRES_MULTIPLE_DATABASES=bank_db
       - POSTGRES_USER=bank_db
       - POSTGRES_PASSWORD=bank_db
-    image: postgres:12-alpine
+    image: postgres:latest
     ports:
       - "5432:5432"
     restart: always
