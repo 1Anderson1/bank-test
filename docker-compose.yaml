@@ -1,0 +1,12 @@
+version: '3.0'
+services:
+  postgres_db:
+    container_name: postgres_db
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=bank_db
+      - POSTGRES_USER=bank_db
+      - POSTGRES_PASSWORD=bank_db
+    image: postgres:12-alpine
+    ports:
+      - "5432:5432"
+    restart: always

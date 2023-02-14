@@ -1,0 +1,53 @@
+server:
+  port: 8080
+spring:
+  # Security configuration
+#  security:
+#    user:
+#      name: user
+#      password: user
+  # Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/bank_db
+    username: bank_db
+    password: bank_db
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 100
+      idle-timeout: 60000
+      max-lifetime: 600000
+      connection-timeout: 60000
+      leak-detection-threshold: 120000
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+  #Migration
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  # JPA properties
+  jpa:
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+# Logger configuration
+logging:
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+  level:
+    org.springframework: info
+    org.hibernate: debug
+
+#SWAGGER
+springdoc:
+  swagger-ui:
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    enabled: true
+  writer-with-order-by-keys: true

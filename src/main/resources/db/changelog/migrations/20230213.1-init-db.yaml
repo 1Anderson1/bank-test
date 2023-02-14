@@ -1,0 +1,116 @@
+databaseChangeLog:
+  - logicalFilePath: 20230213.1-init-db.yaml
+  - changeSet:
+      -preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: USER
+      id: 2023-02-13-1
+      author: Boikov
+      changes:
+        - createTable:
+            tableName: USER
+            schemaName: public
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    unique: true
+              - column:
+                  name: DATE_OF_BIRTH
+                  type: DATE
+              - column:
+                  name: NAME
+                  type: VARCHAR(500)
+              - column:
+                  name: PASSWORD
+                  type: VARCHAR(500)
+  - changeSet:
+      -preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: ACCOUNT
+            - tableExists:
+                tableName: EMAIL_DATA
+            - tableExists:
+                tableName: PHONE_DATA
+      id: 2023-02-13-2
+      author: Boikov
+      changes:
+        - createTable:
+            tableName: ACCOUNT
+            schemaName: public
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    unique: true
+              - column:
+                  name: USER_ID
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_account_user_id
+                    references: USER(ID)
+              - column:
+                  name: BALANCE
+                  type: DECIMAL
+                  defaultValueNumeric: 0.0
+        - createTable:
+            tableName: EMAIL_DATA
+            schemaName: public
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    unique: true
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: USER_ID
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_email_data_user_id
+                    references: USER(ID)
+              - column:
+                  name: EMAIL
+                  type: VARCHAR(200)
+                  constraints:
+                    unique: true
+        - createTable:
+            tableName: PHONE_DATA
+            schemaName: public
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    unique: true
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: USER_ID
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_phone_data_user_id
+                    references: USER(ID)
+              - column:
+                  name: PHONE
+                  type: VARCHAR(13)
+                  constraints:
+                    unique: true
