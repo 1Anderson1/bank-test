@@ -1,11 +1,6 @@
 server:
   port: 8080
 spring:
-  # Security configuration
-#  security:
-#    user:
-#      name: user
-#      password: user
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -25,6 +20,9 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   # JPA properties
   jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -51,3 +49,8 @@ springdoc:
   api-docs:
     enabled: true
   writer-with-order-by-keys: true
+
+#JWT
+app:
+  jwt-secret: JWTSecretKey
+  jwt-expiration-milliseconds: 604800000

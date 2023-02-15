@@ -15,7 +15,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -23,14 +23,16 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: DATE_OF_BIRTH
+                  name: date_of_birth
                   type: DATE
               - column:
-                  name: NAME
+                  name: name
                   type: VARCHAR(500)
               - column:
-                  name: PASSWORD
+                  name: password
                   type: VARCHAR(500)
+                  constraints:
+                    nullable: false
   - changeSet:
       -preConditions:
         - onFail: MARK_RAN
@@ -49,7 +51,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -57,12 +59,12 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: USER_ID
+                  name: user_id
                   type: BIGINT
                   constraints:
                     nullable: false
               - column:
-                  name: BALANCE
+                  name: balance
                   type: DECIMAL
                   defaultValueNumeric: 0.0
         - createTable:
@@ -70,7 +72,7 @@ databaseChangeLog:
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -78,21 +80,22 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: USER_ID
+                  name: user_id
                   type: BIGINT
                   constraints:
                     nullable: false
               - column:
-                  name: EMAIL
+                  name: email
                   type: VARCHAR(200)
                   constraints:
+                    nullable: false
                     unique: true
         - createTable:
             tableName: PHONE_DATA
             schemaName: public
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -100,43 +103,100 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: USER_ID
+                  name: user_id
                   type: BIGINT
                   constraints:
                     nullable: false
               - column:
-                  name: PHONE
+                  name: phone
                   type: VARCHAR(13)
                   constraints:
+                    nullable: false
                     unique: true
   - changeSet:
       -preConditions:
         - onFail: MARK_RAN
-        - not:
-            - tableExists:
-                tableName: ACCOUNT
-            - tableExists:
-                tableName: EMAIL_DATA
-            - tableExists:
-                tableName: PHONE_DATA
+        - tableExists:
+            tableName: ACCOUNT
+        - tableExists:
+            tableName: EMAIL_DATA
+        - tableExists:
+            tableName: PHONE_DATA
       id: 2023-02-13-3
       author: Boikov
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_account_user_id
             baseTableName: ACCOUNT
-            baseColumnNames: USER_ID
+            baseColumnNames: user_id
             referencedTableName: USER
-            referencedColumnNames: ID
+            referencedColumnNames: id
         - addForeignKeyConstraint:
             constraintName: fk_email_data_user_id
             baseTableName: EMAIL_DATA
-            baseColumnNames: USER_ID
+            baseColumnNames: user_id
             referencedTableName: USER
-            referencedColumnNames: ID
+            referencedColumnNames: id
         - addForeignKeyConstraint:
             constraintName: fk_phone_data_user_id
             baseTableName: PHONE_DATA
-            baseColumnNames: USER_ID
+            baseColumnNames: user_id
             referencedTableName: USER
-            referencedColumnNames: ID
+            referencedColumnNames: id
+  - changeSet:
+      -preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: USER
+        - tableExists:
+            tableName: ACCOUNT
+        - tableExists:
+            tableName: EMAIL_DATA
+        - tableExists:
+            tableName: PHONE_DATA
+      id: 2023-02-13-4
+      author: Boikov
+      changes:
+        - insert:
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: testUser
+              - column:
+                  name: password
+                  value: $2a$10$zXcATCgXosnC1GRfSDgurOa3YUc3pdpPhaoVeEWVoUD.Vp.28iFj.  #testUser
+            schemaName: public
+            tableName: USER
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: balance
+                  value: 0.0
+            schemaName: public
+            tableName: ACCOUNT
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: email
+                  value: testUser@gmail.com
+            schemaName: public
+            tableName: EMAIL_DATA
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: phone
+                  value: 79207865432
+            schemaName: public
+            tableName: PHONE_DATA
