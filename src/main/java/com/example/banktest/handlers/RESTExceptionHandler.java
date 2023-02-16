@@ -14,34 +14,6 @@ import java.util.Map;
 @ControllerAdvice
 public class RESTExceptionHandler {
 
-//    @ExceptionHandler(value = NotFoundException.class)
-//    public ResponseEntity<Object> handleConflict(NotFoundException exception) {
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(buildResponseMap(exception));
-//    }
-//
-//    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-//    public ResponseEntity<Object> handleConflict(MethodArgumentNotValidException exception) {
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .body(buildResponseMap(exception));
-//    }
-//
-//    @ExceptionHandler(value = UserAccountBalanceException.class)
-//    public ResponseEntity<Object> handleConflict(UserAccountBalanceException exception) {
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .body(buildResponseMap(exception));
-//    }
-//
-//    @ExceptionHandler(value = UserAccountStatusException.class)
-//    public ResponseEntity<Object> handleConflict(UserAccountStatusException exception) {
-//        return ResponseEntity
-//                .status(HttpStatus.CONFLICT)
-//                .body(buildResponseMap(exception));
-//    }
-
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> handleConflict(Exception exception) {
         return ResponseEntity

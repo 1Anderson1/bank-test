@@ -5,6 +5,7 @@ import com.example.banktest.entity.User;
 import com.example.banktest.exceptions.NotFoundException;
 import com.example.banktest.repository.UserRepository;
 import com.example.banktest.services.UserService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,17 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User getByPhoneOrEmail(String phoneOrEmail) {
+    public User getByPhoneOrEmail(@NonNull String phoneOrEmail) {
         if (phoneOrEmail.matches("[0-9]+")) {
             return getByPhoneOrThrow(phoneOrEmail);
         } else {
             return getByEmailOrThrow(phoneOrEmail);
         }
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     private User getByPhoneOrThrow(String phone) {

@@ -13,11 +13,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    // inject dependencies
     @Autowired
     private JwtTokenService jwtTokenService;
     @Autowired
@@ -28,11 +28,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         // get JWT (token) from http request
-        String token = getJWTfromRequest(request);
+        Optional<String> token = getJWTfromRequest(request);
         // validate token
-        if (StringUtils.hasText(token) && jwtTokenService.validateToken(token)) {
-            // get username from token
-            String username = jwtTokenService.getUsernameFromJWT(token);
+        if (token.isPresent() && jwtTokenService.validateToken(token.get())) {
+            // get userId from token
+            String username = jwtTokenService.getUsernameFromJWT(token.get());
             // load user associated with token
             UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
 
@@ -47,11 +47,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
 
-    private String getJWTfromRequest(HttpServletRequest request) {
+    private Optional<String> getJWTfromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+            return Optional.of(bearerToken.substring(7));
         }
-        return null;
+        return Optional.empty();
     }
 }

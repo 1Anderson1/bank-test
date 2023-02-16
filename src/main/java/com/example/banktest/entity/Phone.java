@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "\"ACCOUNT\"")
+@Table(name = "\"PHONE_DATA\"")
 @Validated
 public class Phone {
 
@@ -27,7 +27,7 @@ public class Phone {
     @Setter(AccessLevel.NONE)
     private Long userId;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
