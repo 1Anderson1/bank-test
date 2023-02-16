@@ -10,12 +10,14 @@ import com.example.banktest.services.PhoneService;
 import com.example.banktest.services.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PhoneServiceImpl implements PhoneService {
 
     private final PhoneRepository phoneRepository;
@@ -44,6 +46,7 @@ public class PhoneServiceImpl implements PhoneService {
         User user = userService.getByPhoneOrEmail(emailOrPhone);
 
         if (!isItPossibleToDeleteUserPhone(user, deletePhoneRequestDto.getPhoneToDelete())) {
+            log.warn("it is not possible to delete the user's phone {}", emailOrPhone);
             throw new IllegalArgumentException();
         }
         Phone phone = phoneRepository.getByPhone(deletePhoneRequestDto.getPhoneToDelete());
@@ -55,6 +58,7 @@ public class PhoneServiceImpl implements PhoneService {
         User user = userService.getByPhoneOrEmail(emailOrPhone);
 
         if (!isItPossibleToUpdateUserPhone(user, updatePhoneRequestDto.getOldPhone())) {
+            log.warn("it is not possible to update the user's phone {}", emailOrPhone);
             throw new IllegalArgumentException();
         }
 
