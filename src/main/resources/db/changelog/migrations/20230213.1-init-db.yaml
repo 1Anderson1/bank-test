@@ -177,7 +177,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: balance
-                  value: 0.0
+                  value: 100.0
             schemaName: public
             tableName: ACCOUNT
         - insert:
@@ -198,5 +198,62 @@ databaseChangeLog:
               - column:
                   name: phone
                   value: 79207865432
+            schemaName: public
+            tableName: PHONE_DATA
+  - changeSet:
+      -preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: USER
+        - tableExists:
+            tableName: ACCOUNT
+        - tableExists:
+            tableName: EMAIL_DATA
+        - tableExists:
+            tableName: PHONE_DATA
+      id: 2023-02-13-5
+      author: Boikov
+      changes:
+        - insert:
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: testUser2
+              - column:
+                  name: password
+                  value: $2a$10$PrChBcwTbFJnNQ2dzoQYG.ylZWD6S/tT3NwG6LzAlMiaQBrUODZAi  #testUser2
+            schemaName: public
+            tableName: USER
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: balance
+                  value: 200.0
+            schemaName: public
+            tableName: ACCOUNT
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: email
+                  value: testUser2@gmail.com
+            schemaName: public
+            tableName: EMAIL_DATA
+        - insert:
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: phone
+                  value: 79203365433
             schemaName: public
             tableName: PHONE_DATA
