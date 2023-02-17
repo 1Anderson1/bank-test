@@ -9,4 +9,6 @@ public class UserResponseDto {
 
     @NotNull
     private Long id;
+
+    private String name;
 }

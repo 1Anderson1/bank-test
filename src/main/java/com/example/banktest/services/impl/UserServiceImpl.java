@@ -7,6 +7,7 @@ import com.example.banktest.repository.UserRepository;
 import com.example.banktest.services.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "findUsersBySearchString")
     public List<User> findUsersBySearchString(@NonNull String searchString, Pageable pageable) {
         return userRepository.findAllBySearchQuery(searchString, pageable.getPageNumber(), pageable.getPageSize());
     }
