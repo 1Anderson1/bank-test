@@ -4,6 +4,7 @@ import com.example.banktest.entity.Account;
 import com.example.banktest.repository.AccountRepository;
 import com.example.banktest.services.UserAccountService;
 import com.example.banktest.utils.PercentageMathUtil;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -26,9 +27,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void increaseBalanceBy10Percent(Long accountId, BigDecimal maxBalance) {
+    public void increaseBalanceBy10Percent(@NonNull Long accountId, @NonNull BigDecimal maxBalance) {
         Optional<Account> optionalAccount = accountRepository.findById(accountId);
-        if (optionalAccount.isEmpty()){
+        if (optionalAccount.isEmpty()) {
             return;
         }
         Account account = optionalAccount.get();
@@ -38,6 +39,32 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         account.setBalance(increasedByPercentage);
         save(account);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void transferMoney(@NonNull Long senderAccountId, @NonNull Long recipientAccountId, @NonNull BigDecimal amount) {
+        Optional<Account> senderAccountOptional = accountRepository.findById(senderAccountId);
+        Optional<Account> recipientAccountOptional = accountRepository.findById(recipientAccountId);
+
+        if (senderAccountId.equals(recipientAccountId)
+                || senderAccountOptional.isEmpty()
+                || recipientAccountOptional.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
+        Account senderAccount = senderAccountOptional.get();
+        Account recipientAccount = recipientAccountOptional.get();
+
+        if (senderAccount.getBalance().compareTo(amount) < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        senderAccount.setBalance(senderAccount.getBalance().subtract(amount));
+        recipientAccount.setBalance(recipientAccount.getBalance().add(amount));
+
+        save(senderAccount);
+        save(recipientAccount);
     }
 
     private Account save(Account account) {

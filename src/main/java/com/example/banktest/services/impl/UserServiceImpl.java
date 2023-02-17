@@ -7,8 +7,6 @@ import com.example.banktest.repository.UserRepository;
 import com.example.banktest.services.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +26,11 @@ public class UserServiceImpl implements UserService {
         } else {
             return getByEmailOrThrow(phoneOrEmail);
         }
+    }
+
+    @Override
+    public User getByIdOrThrow(@NonNull Long userId) {
+        return userRepository.findById(userId).orElseThrow(NotFoundException::new);
     }
 
     @Override
