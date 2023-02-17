@@ -7,8 +7,12 @@ import com.example.banktest.repository.UserRepository;
 import com.example.banktest.services.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,8 +31,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
+    public List<User> findUsersBySearchString(@NonNull String searchString, Pageable pageable) {
+        return userRepository.findAllBySearchQuery(searchString, pageable.getPageNumber(), pageable.getPageSize());
     }
 
     private User getByPhoneOrThrow(String phone) {
