@@ -177,7 +177,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: balance
-                  value: 100.0
+                  value: 1000000.0
             schemaName: public
             tableName: ACCOUNT
         - insert:
@@ -234,7 +234,7 @@ databaseChangeLog:
                   value: 2
               - column:
                   name: balance
-                  value: 200.0
+                  value: 2000000.0
             schemaName: public
             tableName: ACCOUNT
         - insert:

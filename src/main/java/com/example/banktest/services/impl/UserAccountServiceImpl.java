@@ -42,10 +42,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(timeout = 10)
     public void transferMoney(@NonNull Long senderAccountId, @NonNull Long recipientAccountId, @NonNull BigDecimal amount) {
-        Optional<Account> senderAccountOptional = accountRepository.findById(senderAccountId);
-        Optional<Account> recipientAccountOptional = accountRepository.findById(recipientAccountId);
+        Optional<Account> senderAccountOptional = accountRepository.findAccountById(senderAccountId);
+        Optional<Account> recipientAccountOptional = accountRepository.findAccountById(recipientAccountId);
 
         if (senderAccountId.equals(recipientAccountId)
                 || senderAccountOptional.isEmpty()
